@@ -4,16 +4,16 @@ import acs.boundary.BlogPostBoundary;
 import acs.logic.utils.FilterType;
 import acs.logic.utils.FilterTypePartial;
 import acs.logic.utils.SortOrder;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 public interface BlogPostService {
-    Mono<BlogPostBoundary> createPost (BlogPostBoundary post);
+    BlogPostBoundary createPost (BlogPostBoundary post);
 
-    Flux<BlogPostBoundary> getAll (FilterTypePartial filterType, String filterValue, String sortBy, SortOrder sortOrder);
+    List<BlogPostBoundary> getAll (FilterTypePartial filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder);
 
-    Flux<BlogPostBoundary> getAllByUser(String email, FilterType filterType, String filterValue, String sortBy, SortOrder sortOrder);
+    List<BlogPostBoundary> getAllByUser(String email, FilterType filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder);
 
-    Flux<BlogPostBoundary> getAllByProduct(String productId, FilterType filterType, String filterValue, String sortBy, SortOrder sortOrder);
+    List<BlogPostBoundary> getAllByProduct(String productId, FilterType filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder);
 }
 
