@@ -1,4 +1,4 @@
-Shopping Catalog Service
+Blog Microservice
 ==========================
 
 # What you’ll need
