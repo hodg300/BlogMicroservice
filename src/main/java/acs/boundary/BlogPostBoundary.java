@@ -2,14 +2,12 @@ package acs.boundary;
 
 import acs.utils.Product;
 import acs.utils.User;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BlogPostBoundary {
 
-    private String id;
     private User user;
     private Product product;
     private Date postingTimeStamp;
@@ -26,14 +24,6 @@ public class BlogPostBoundary {
         this.postingTimeStamp = postingTimeStamp;
         this.language = language;
         this.postContent = postContent;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public User getUser() {

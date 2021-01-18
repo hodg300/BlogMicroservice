@@ -37,49 +37,45 @@ public class BlogPostServiceWithDB implements EnhancedBlogPostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BlogPostBoundary> getAll(FilterTypePartial filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
+    public List<BlogPostBoundary> getAll(FilterTypeBlog filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
 
         Sort.Direction direction = sortOrder == SortOrder.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
-
-        if(filterType!=null &&filterValue!=null) {
             // byCreation
-            if (filterType.equals(FilterTypePartial.BY_CREATION)) {
-                return this.blogDao.findAllByPostingTimeStampBetween(getFromDate(filterValue),
-                        new Date(), PageRequest.of(page, size, direction, sortBy)).stream()
-                        .map(this.converter::fromEntity).collect(Collectors.toList());
+        if (filterType.equals(FilterTypeBlog.BY_CREATION)) {
+            return this.blogDao.findAllByPostingTimeStampBetween(getFromDate(filterValue),
+                    new Date(), PageRequest.of(page, size, direction, sortBy)).stream()
+                    .map(this.converter::fromEntity).collect(Collectors.toList());
+        }
+        // byCount
+        if(filterType.equals(FilterTypeBlog.BY_COUNT)){
+            int count = Integer.parseInt(filterValue);
+            if(count <= 0){
+                throw new BadRequestException("count must be greater than zero");
             }
-            // byCount
-            if(filterType.equals(FilterTypePartial.BY_COUNT)){
-                int count = Integer.parseInt(filterValue);
-                if(count <= 0){
-                    throw new BadRequestException("count must be greater than zero");
-                }
-                return this.blogDao.findAll(PageRequest.of(page, count, direction, sortBy)).stream()
-                        .map(this.converter::fromEntity).collect(Collectors.toList());
-            }
+            return this.blogDao.findAll(PageRequest.of(page, count, direction, sortBy)).stream()
+                    .map(this.converter::fromEntity).collect(Collectors.toList());
         }
 
-        return this.blogDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
-                .map(this.converter::fromEntity).collect(Collectors.toList());
+        throw new BadRequestException("FilterType must be specified");
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<BlogPostBoundary> getAllByUser(String email, FilterType filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
+    public List<BlogPostBoundary> getAllByUser(String email, FilterTypeUser filterTypeUser, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
                 Sort.Direction direction = sortOrder == SortOrder.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
-        if (filterType != null && filterValue != null) {
+        if (filterTypeUser != null && filterValue != null) {
             // byLanguage
-            if (filterType.equals(FilterType.BY_LANGUAGE)) {
+            if (filterTypeUser.equals(FilterTypeUser.BY_LANGUAGE)) {
                 return this.blogDao.findAllByUser_Email_AndLanguage(email, filterValue,
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
             // byCreation
-            if (filterType.equals(FilterType.BY_CREATION)) {
+            if (filterTypeUser.equals(FilterTypeUser.BY_CREATION)) {
                 return this.blogDao.findAllByUser_Email_AndPostingTimeStampBetween(email, getFromDate(filterValue), new Date(),
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
             // byProduct
-            if (filterType.equals(FilterType.BY_PRODUCT)) {
+            if (filterTypeUser.equals(FilterTypeUser.BY_PRODUCT)) {
                 return this.blogDao.findAllByUser_Email_AndProduct_Id(email, filterValue,
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
@@ -91,17 +87,17 @@ public class BlogPostServiceWithDB implements EnhancedBlogPostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BlogPostBoundary> getAllByProduct(String productId, FilterType filterType, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
+    public List<BlogPostBoundary> getAllByProduct(String productId, FilterTypeProduct filterTypeProduct, String filterValue, int size, int page, String sortBy, SortOrder sortOrder) {
                 Sort.Direction direction = sortOrder == SortOrder.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
-        if(filterType!=null&&filterValue!=null){
+        if(filterTypeProduct !=null&&filterValue!=null){
             // byLanguage
-            if(filterType.equals(FilterType.BY_LANGUAGE)){
+            if(filterTypeProduct.equals(FilterTypeUser.BY_LANGUAGE)){
                 return this.blogDao.findAllByProduct_Id_AndLanguage(productId, filterValue,
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity)
                         .collect(Collectors.toList());
             }
             // byCreation
-            if(filterType.equals((FilterType.BY_CREATION))){
+            if(filterTypeProduct.equals((FilterTypeUser.BY_CREATION))){
                 return this.blogDao.findAllByProduct_Id_AndPostingTimeStampBetween(productId, getFromDate(filterValue), new Date(),
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity)
                         .collect(Collectors.toList());

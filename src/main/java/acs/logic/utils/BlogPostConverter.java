@@ -10,7 +10,6 @@ public class BlogPostConverter {
 
     public BlogPostBoundary fromEntity(BlogPostEntity entity) {
         BlogPostBoundary rv = new BlogPostBoundary();
-        rv.setId(entity.getId());
         rv.setLanguage(entity.getLanguage());
         rv.setPostContent(entity.getPostContent());
         rv.setPostingTimeStamp(entity.getPostingTimeStamp());

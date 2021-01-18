@@ -1,6 +1,6 @@
 package acs.logic.utils;
 
-public enum FilterTypePartial {
+public enum FilterTypeBlog {
     BY_CREATION,
     BY_COUNT;
 }

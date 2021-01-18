@@ -5,7 +5,6 @@ import acs.utils.Product;
 import acs.utils.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,14 +31,6 @@ public class BlogPostEntity {
         this.postContent = postContent;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public User getUser() {
         return user;
     }
@@ -57,8 +48,8 @@ public class BlogPostEntity {
     }
 
     public void setProduct(Product product) {
-        if (product == null){
-            throw new BadRequestException("product must be specified");
+        if (product == null || product.getId() == null){
+            throw new BadRequestException("product and product id must be specified");
         }
         this.product = product;
     }

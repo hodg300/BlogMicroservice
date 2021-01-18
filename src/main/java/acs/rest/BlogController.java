@@ -2,8 +2,9 @@ package acs.rest;
 
 import acs.boundary.BlogPostBoundary;
 import acs.logic.BlogPostService;
-import acs.logic.utils.FilterType;
-import acs.logic.utils.FilterTypePartial;
+import acs.logic.utils.FilterTypeProduct;
+import acs.logic.utils.FilterTypeUser;
+import acs.logic.utils.FilterTypeBlog;
 import acs.logic.utils.SortOrder;
 import acs.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ public class BlogController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public BlogPostBoundary[] getAllByUser (
             @PathVariable("email") String email,
-            @RequestParam(name = "filterType", required = false) FilterType filterType,
+            @RequestParam(name = "filterType", required = false) FilterTypeUser filterTypeUser,
             @RequestParam(name = "filterValue", required = false) String filterValue,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "sortBy", required = false, defaultValue = Constants.POSTING_TIME_STAMP) String sortBy,
             @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") SortOrder sortOrder) {
-        return this.blogService.getAllByUser(email, filterType, filterValue, size, page, sortBy, sortOrder).
+        return this.blogService.getAllByUser(email, filterTypeUser, filterValue, size, page, sortBy, sortOrder).
                 toArray(new BlogPostBoundary[0]);
     }
 
@@ -57,14 +58,14 @@ public class BlogController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public BlogPostBoundary[] getAllByProduct (
             @PathVariable("productId") String productId,
-            @RequestParam(name = "filterType", required = false) FilterType filterType,
+            @RequestParam(name = "filterType", required = false) FilterTypeProduct filterTypeProduct,
             @RequestParam(name = "filterValue", required = false) String filterValue,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "sortBy", required = false, defaultValue = Constants.POSTING_TIME_STAMP) String sortBy,
             @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") SortOrder sortOrder) {
 
-        return this.blogService.getAllByProduct(productId, filterType, filterValue, size, page, sortBy, sortOrder)
+        return this.blogService.getAllByProduct(productId, filterTypeProduct, filterValue, size, page, sortBy, sortOrder)
                 .toArray(new BlogPostBoundary[0]);
     }
 
@@ -74,14 +75,14 @@ public class BlogController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public BlogPostBoundary[] getAll (
-            @RequestParam(name = "filterType", required = false) FilterTypePartial filterTypePartial,
-            @RequestParam(name = "filterValue", required = false) String filterValue,
+            @RequestParam(name = "filterType", required = true) FilterTypeBlog filterTypeBlog,
+            @RequestParam(name = "filterValue", required = true) String filterValue,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "sortBy", required = false, defaultValue = Constants.POSTING_TIME_STAMP) String sortBy,
             @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") SortOrder sortOrder) {
 
-        return this.blogService.getAll(filterTypePartial, filterValue, size, page, sortBy, sortOrder)
+        return this.blogService.getAll(filterTypeBlog, filterValue, size, page, sortBy, sortOrder)
                 .toArray(new BlogPostBoundary[0]);
     }
 }

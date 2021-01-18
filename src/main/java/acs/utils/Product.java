@@ -1,5 +1,7 @@
 package acs.utils;
 
+import javax.validation.constraints.NotNull;
+
 public class Product {
     private String id;
 
