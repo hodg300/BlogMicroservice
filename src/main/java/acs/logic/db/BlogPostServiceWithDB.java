@@ -10,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -91,13 +89,13 @@ public class BlogPostServiceWithDB implements EnhancedBlogPostService {
                 Sort.Direction direction = sortOrder == SortOrder.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
         if(filterTypeProduct !=null&&filterValue!=null){
             // byLanguage
-            if(filterTypeProduct.equals(FilterTypeUser.BY_LANGUAGE)){
+            if(filterTypeProduct.equals(FilterTypeProduct.BY_LANGUAGE)){
                 return this.blogDao.findAllByProduct_Id_AndLanguage(productId, filterValue,
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity)
                         .collect(Collectors.toList());
             }
             // byCreation
-            if(filterTypeProduct.equals((FilterTypeUser.BY_CREATION))){
+            if(filterTypeProduct.equals((FilterTypeProduct.BY_CREATION))){
                 return this.blogDao.findAllByProduct_Id_AndPostingTimeStampBetween(productId, getFromDate(filterValue), new Date(),
                         PageRequest.of(page, size, direction, sortBy)).stream().map(this.converter::fromEntity)
                         .collect(Collectors.toList());
